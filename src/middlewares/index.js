@@ -11,12 +11,12 @@ function authenticateToken(req, res) {
     })
 }
 
-function checkAuthentication(req,res,next){
-    if(req.isAuthenticated()) {
+function checkAuthentication(req, res, next) {
+    if (req.isAuthenticated()) {
         next();
-    } else{
-        res.status(403).send({reason: "unauthenticated"});
+    } else {
+        res.status(403).send({ reason: "unauthenticated" });
     }
-  }
+}
 
 export { authenticateToken, checkAuthentication }

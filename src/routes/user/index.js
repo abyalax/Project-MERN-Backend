@@ -3,6 +3,6 @@ import { getUser } from '../../controller/users/index.js';
 
 const UserRoutes = Router();
 
-UserRoutes.get('/user/{id}', getUser);
+UserRoutes.get('/user', getUser);
 
 export default UserRoutes;

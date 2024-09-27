@@ -2,8 +2,8 @@ import { responseInternalServerError, responseNotFound } from "../../utils/respo
 import User from "../../models/schema/user.js";
 
 const getUser = async (req, res) => {
-    const { id } = req.params;
 
+    const { id } = req.params
     try {
         const user = await User.findById(id);
         if (!user) {

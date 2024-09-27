@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema(
     name: { type: String, required: true },
     phone: { type: String },
     profileImage: { type: String },
+    role: {type: String, enum: ['user', 'admin'], default: 'user'},
     address: [
       {
         recipient: { type: String, required: true },
@@ -40,19 +41,17 @@ UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 
 const User = mongoose.model('User', UserSchema, 'users');
 
-// Konfigurasi Passport
 passport.use(new LocalStrategy(
-  { usernameField: 'email' }, // Menentukan field yang digunakan untuk username
-  async (email, password, done) => {
+  { usernameField: 'email' },
+  async (email, done) => {
     try {
       const user = await User.findOne({ email });
       if (!user) {
         return done(null, false, { message: 'Incorrect email.' });
       }
-      // Password sudah divalidasi oleh passport-local-mongoose, jadi kita tidak perlu validasi manual
       return done(null, user);
     } catch (err) {
-      return done(err);
+      return done(err, null);
     }
   }
 ));
