@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { Store } from './store';
 
 const UserSchema = new mongoose.Schema(
   {
@@ -27,7 +26,7 @@ const UserSchema = new mongoose.Schema(
         like: { type: Boolean, default: false },
       },
     ],
-    stores: [Store]
+    stores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store' }],
   },
   {
     timestamps: true,
