@@ -1,11 +1,10 @@
+import { responseDenied, responseUnauthenticated } from "../utils/response";
+
 function authenticateToken(req, res) {
     const authCookie = req.cookies['authcookie'];
-
-    if (authCookie == null) return res.sendStatus(401);
-
+    if (authCookie == null) return responseDenied(res)
     jwt.verify(authCookie, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-
+        if (err) return responseDenied(res)
         req.user = user;
         next();
     })
@@ -15,7 +14,7 @@ function checkAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {
-        res.status(403).send({ reason: "unauthenticated" });
+       return responseUnauthenticated(res)
     }
 }
 

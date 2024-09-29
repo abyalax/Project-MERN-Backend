@@ -12,10 +12,6 @@ const responseData = (res, data) => {
     return responseAPI(res, true, 200, 'success', data)
 }
 
-const responseMessage = (res, message) => {
-    return responseAPI(res, true, 200, message)
-}
-
 const responseSuccess = (res) => {
     return responseAPI(res, true, 200, 'success')
 }
@@ -48,8 +44,12 @@ const responseInternalServerError = (res) => {
     return responseAPI(res, false, 500, 'internal server error')
 }
 
+const responseError = (res, error) => {
+    return responseAPI(res, false, 500, error)
+}
 export {
     responseData, responseSuccess, responseNotFound, responseFailed,
     responseDenied, responseMethodNotAllowed, responseUnauthorized,
-    responseUnauthenticated, responseInternalServerError, responseMessage
+    responseUnauthenticated, responseInternalServerError,
+    responseAPI, responseError
 }

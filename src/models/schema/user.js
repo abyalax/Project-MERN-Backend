@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
-import passportLocalMongoose from 'passport-local-mongoose';
-import passport from 'passport';
-import LocalStrategy from 'passport-local';
+import { Store } from './store';
 
-// Schema untuk user
 const UserSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
@@ -11,8 +8,9 @@ const UserSchema = new mongoose.Schema(
     emailVerificationHash: { type: String },
     name: { type: String, required: true },
     phone: { type: String },
+    password: { type: String },
     profileImage: { type: String },
-    role: {type: String, enum: ['user', 'admin'], default: 'user'},
+    role: { type: String, enum: ['user', 'admin'], default: 'user' },
     address: [
       {
         recipient: { type: String, required: true },
@@ -29,46 +27,13 @@ const UserSchema = new mongoose.Schema(
         like: { type: Boolean, default: false },
       },
     ],
-    stores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store' }],
+    stores: [Store]
   },
   {
     timestamps: true,
   }
 );
 
-// Menggunakan passport-local-mongoose
-UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
-
 const User = mongoose.model('User', UserSchema, 'users');
-
-passport.use(new LocalStrategy(
-  { usernameField: 'email' },
-  async (email, done) => {
-    try {
-      const user = await User.findOne({ email });
-      if (!user) {
-        return done(null, false, { message: 'Incorrect email.' });
-      }
-      return done(null, user);
-    } catch (err) {
-      return done(err, null);
-    }
-  }
-));
-
-passport.serializeUser((user, done) => {
-  console.log('serializing user: ');
-  console.log(user);
-  done(null, user._id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
 
 export default User;
