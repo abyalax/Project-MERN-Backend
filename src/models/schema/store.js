@@ -1,19 +1,25 @@
 import mongoose from 'mongoose';
 
-// Subsidiary schema untuk store products
 const StoreProductSchema = new mongoose.Schema({
-  productId: { type: String, required: true, ref: 'Product' }, // Mengacu ke produk berdasarkan ID
+  productId: { type: String, required: true, ref: 'Product' },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
   like: { type: Boolean, default: false },
 });
 
-// Schema untuk store
 const StoreSchema = new mongoose.Schema({
   storeId: { type: String, required: true },
-  name: { type: String, required: true },
-  address: { type: String, required: true },
-  products: [StoreProductSchema], // Array of products in the store
+  store: { type: String, required: true },
+  phone: { type: String, required: true },
+  domain: { type: String, required: true },
+  address: {
+    provincy : { type: String, required: true },
+    regency : { type: String, required: true },
+    municipality : { type: String, required: true },
+    village : { type: String, required: true },
+    kodePost : { type: Number, required: true },
+  },
+  products: [StoreProductSchema],
 });
 
 export const Store = mongoose.model('Store', StoreSchema);

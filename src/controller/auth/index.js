@@ -4,7 +4,6 @@ import { responseData, responseSuccess, responseInternalServerError, responseUna
 import { config } from 'dotenv';
 import User from '../../models/schema/user.js';
 import Verification from '../../models/schema/verify-email.js';
-import { verifyToken } from '../../utils/verifyToken.js';
 
 config();
 const register = async (req, res) => {
@@ -56,8 +55,11 @@ const login = async (req, res) => {
             id: user._id,
             role: user.role
         };
-        const token = jwt.sign(tokenData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-        res.cookie('accessToken', token, { maxAge: 3600000, httpOnly: true });
+        const token = jwt.sign(tokenData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '4h' });
+        if (token) {
+            console.log("Assign Token: ", token)
+        }
+        res.cookie('accessToken', token, { maxAge: 14400000, httpOnly: true });
 
         const userResponse = {
             id: user._id,
@@ -78,21 +80,25 @@ const login = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-    verifyToken(req, res, async (decoded) => {
-        if (decoded) {
-            try {
-                const user = await User.findById(decoded.id);
-                if (!user) {
-                    return responseAPI(res, false, 404, 'user not found');
-                }
-                return responseData(res, user);
-            } catch (err) {
-                return responseError(res, err)
-            }
-        } else {
-            return responseAPI(res, false, 401, 'token invalid');
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return responseAPI(res, false, 404, 'user not found');
         }
-    })
+        const response = {
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            profileImage: user.profileImage,
+            role: user.role,
+            address: user.address,
+            carts: user.carts,
+            stores: user.stores
+        }
+        return responseData(res, response);
+    } catch (err) {
+        return responseError(res, err)
+    }
 };
 
 const Logout = (req, res) => {

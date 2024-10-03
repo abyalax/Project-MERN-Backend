@@ -1,23 +1,22 @@
-import jwt from "jsonwebtoken";
-import { responseAPI, responseDenied } from "./response.js";
-import cookie from 'cookie';
-
-export const verifyToken = (req, res, callback) => {
-    const cookies = cookie.parse(req.headers.cookie || '');
+export const verifyToken = (req, res, next) => {
+    const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
     const token = cookies.accessToken;
 
-    if (token) {
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-            if (err) {
-                console.error("JWT Error:", err);
-                return responseAPI(res, false, 400, "Failed to authenticate token");
-            }
-            if (decoded) {
-                callback(decoded);
-            }
-        });
-
-    } else {
-        return responseDenied(res);
+    if (!token) {
+        return next(new Error('No token provided'));
     }
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return next(new Error('Failed to authenticate token'));
+        }
+        if (decoded) {
+            if (decoded.exp < Date.now() / 1000) {
+                return next(new Error('Token expired'));
+            }
+            console.log("Decoded: ", decoded);
+            req.id = decoded.id;
+            next();
+        }
+    });
 };
