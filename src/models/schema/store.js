@@ -8,16 +8,16 @@ const StoreProductSchema = new mongoose.Schema({
 });
 
 const StoreSchema = new mongoose.Schema({
-  storeId: { type: String, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   store: { type: String, required: true },
   phone: { type: String, required: true },
   domain: { type: String, required: true },
   address: {
-    provincy : { type: String, required: true },
-    regency : { type: String, required: true },
-    municipality : { type: String, required: true },
-    village : { type: String, required: true },
-    kodePost : { type: Number, required: true },
+    provincy: { type: String, required: true },
+    regency: { type: String, required: true },
+    municipality: { type: String, required: true },
+    village: { type: String, required: true },
+    kodePost: { type: Number, required: true },
   },
   products: [StoreProductSchema],
 });
