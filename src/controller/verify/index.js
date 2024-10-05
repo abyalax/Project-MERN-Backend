@@ -8,7 +8,7 @@ const sendVerificationEmail = async ({
     verificationHash,
     email
 }) => {
-    const origin = process.env.ORIGIN || 'http://localhost:5173';
+    const origin = process.env.ORIGIN_DEVELOPMENT || process.env.ORIGIN_PRODUCTION;
     const linkAddress = `${origin}/auth/register?code=${verificationHash}&email=${email}`
     const name = email.split("@")[0]
     return await sendMail({
