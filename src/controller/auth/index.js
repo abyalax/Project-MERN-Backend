@@ -11,8 +11,10 @@ const register = async (req, res) => {
     try {
         const verification = await Verification.findOne({ email, status: 'VERIFIED' });
         if (!verification) {
-            return responseAPI(res, false, 400, "Email is not verified");
+            return responseAPI(res, false, 401, "Email is not verified");
         }
+        const userAtDB = await User.findOne({ email });
+        if (userAtDB) return responseAPI(res, false, 409, "Email already registered");
         const passwordHass = await bcrypt.hash(password, 10);
         const newUser = new User({
             name,
@@ -42,12 +44,13 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        if (!email || !password)
+        if (!email || !password || email === undefined || password === undefined || email === '' || password === '')
             return responseAPI(res, false, 400, "Email and password are required");
         const user = await User.findOne({ email });
         if (!user)
             return responseAPI(res, false, 404, "User not found");
-        const isMatch = bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
+
         if (!isMatch) {
             return responseAPI(res, false, 401, "Incorrect password");
         }
@@ -102,6 +105,8 @@ const getUser = async (req, res) => {
 };
 
 const Logout = (req, res) => {
+    const token = req.userId
+    if(!token) return responseUnauthorized(res)
     const remove = res.clearCookie('accessToken');
     if (remove) return responseSuccess(res)
     return responseInternalServerError(res)

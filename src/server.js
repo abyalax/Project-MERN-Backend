@@ -9,7 +9,8 @@ import VerifyRoutes from "./routes/verify/index.js";
 import StoreRoutes from "./routes/stores/index.js";
 import userRoutes from "./routes/user/index.js";
 import { authenticateToken } from "./middlewares/index.js";
-
+import cldRoutes from "./routes/cloudinary/index.js";
+import ProductRoutes from "./routes/products/index.js";
 
 const app = express();
 const mongoURL = process.env.MONGO_URL;
@@ -31,7 +32,9 @@ app.use(cookieParser())
 app.use('/api/verify', VerifyRoutes)
 app.use('/api/auth', AuthRoute);
 app.use('/api/store', authenticateToken, StoreRoutes)
-app.use('/api/user',authenticateToken, userRoutes)
+app.use('/api/user', authenticateToken, userRoutes)
+app.use('/api/products', ProductRoutes)
+app.use("/cloud", cldRoutes);
 
 //Server
 mongoose.connect(mongoURL)

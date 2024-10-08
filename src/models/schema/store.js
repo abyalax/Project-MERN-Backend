@@ -1,12 +1,5 @@
 import mongoose from 'mongoose';
 
-const StoreProductSchema = new mongoose.Schema({
-  productId: { type: String, required: true, ref: 'Product' },
-  quantity: { type: Number, required: true },
-  price: { type: Number, required: true },
-  like: { type: Boolean, default: false },
-});
-
 const StoreSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   store: { type: String, required: true },
@@ -19,7 +12,9 @@ const StoreSchema = new mongoose.Schema({
     village: { type: String, required: true },
     kodePost: { type: Number, required: true },
   },
-  products: [StoreProductSchema],
+  products: [{
+    ProductID: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+  }],
 });
 
 export const Store = mongoose.model('Store', StoreSchema);
