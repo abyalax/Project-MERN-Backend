@@ -21,9 +21,12 @@ const UserSchema = new mongoose.Schema(
     carts: [
       {
         productId: { type: String, required: true, ref: 'Product' },
+        name: { type: String, required: true },
+        nameStore: { type: String, required: true },
+        image: { type: { secure_url: String }, required: true },
         quantity: { type: Number, required: true },
         price: { type: Number, required: true },
-        like: { type: Boolean, default: false },
+        liked: { type: Boolean, default: false },
       },
     ],
     stores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store' }],

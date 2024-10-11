@@ -25,8 +25,8 @@ const register = async (req, res) => {
         });
         const user = await newUser.save();
         if (!user) return responseAPI(res, false, 400, "Failed to register user");
-        const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-        res.cookie('accessToken', token, { maxAge: 3600000, httpOnly: true });
+        const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
+        res.cookie('accessToken', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
         const data = {
             user: {
                 id: user._id,
@@ -50,19 +50,18 @@ const login = async (req, res) => {
         if (!user)
             return responseAPI(res, false, 404, "User not found");
         const isMatch = await bcrypt.compare(password, user.password);
-
         if (!isMatch) {
-            return responseAPI(res, false, 401, "Incorrect password");
+            return responseAPI(res, false, 401, "Incorrect password disini");
         }
         const tokenData = {
             id: user._id,
             role: user.role
         };
-        const token = jwt.sign(tokenData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '4h' });
+        const token = jwt.sign(tokenData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
         if (token) {
             console.log("Assign Token: ", token)
         }
-        res.cookie('accessToken', token, { maxAge: 14400000, httpOnly: true });
+        res.cookie('accessToken', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
         const userResponse = {
             id: user._id,
