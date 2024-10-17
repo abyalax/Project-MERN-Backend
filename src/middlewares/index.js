@@ -3,9 +3,19 @@ import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
 
 function authenticateToken(req, res, next) {
-    const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-    const token = cookies.accessToken;
+    // const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+    // const token = cookies.accessToken;
 
+    // if (token.length === 0) return responseAPI(res, false, 401, "No token provided");
+
+    let cookies = {};
+    try {
+        cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+    } catch (err) {
+        return responseAPI(res, false, 400, "Error parsing cookies");
+    }
+
+    const token = cookies.accessToken;
     if (!token) return responseAPI(res, false, 401, "No token provided");
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
