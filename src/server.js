@@ -13,7 +13,7 @@ import cldRoutes from "./routes/cloudinary/index.js";
 import ProductRoutes from "./routes/products/index.js";
 
 const app = express();
-const mongoURL = process.env.MONGO_URL;
+const mongoURL = process.env.MONGO_URL_CLOUD;
 
 var corsOption = {
     origin: true,
@@ -22,6 +22,10 @@ var corsOption = {
     exposedHeaders: ['x-auth-token', "Access-Control-Allow-Credentials"]
 };
 app.use(cors(corsOption));
+
+app.get('/', (req, res) => {
+    res.send("Hello API success runnning");
+})
 
 // Middlewares
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -34,7 +38,7 @@ app.use('/api/auth', AuthRoute);
 app.use('/api/store', authenticateToken, StoreRoutes)
 app.use('/api/user', authenticateToken, userRoutes)
 app.use('/api/products', ProductRoutes)
-app.use("/cloud", cldRoutes);
+app.use("/api/cloud", cldRoutes);
 
 //Server
 mongoose.connect(mongoURL)
@@ -42,5 +46,5 @@ mongoose.connect(mongoURL)
     .catch((err) => console.log(err))
 
 app.listen(4000, () => {
-    console.log('Server running at http://localhost:4000');
+    console.log('Server running at port 4000');
 });
