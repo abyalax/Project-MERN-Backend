@@ -41,7 +41,7 @@ app.use('/api/products', ProductRoutes)
 app.use("/api/cloud", cldRoutes);
 
 //Server
-mongoose.connect(mongoURL)
+mongoose.connect(`${mongoURL}`)
     .then(() => console.log("Database is Connected Succesfully"))
     .catch((err) => console.log(err))
 
