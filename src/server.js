@@ -16,7 +16,7 @@ const app = express();
 const mongoURL = process.env.MONGO_URL_CLOUD;
 
 var corsOption = {
-    origin: true,
+    origin: ['https://project-mern-frontend.vercel.app', 'http://localhost:5173'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     exposedHeaders: ['x-auth-token', "Access-Control-Allow-Credentials"]

@@ -26,7 +26,15 @@ const register = async (req, res) => {
         const user = await newUser.save();
         if (!user) return responseAPI(res, false, 400, "Failed to register user");
         const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
-        res.cookie('accessToken', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+
+        res.cookie('accessToken', token, {
+            maxAge: 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            domain: '.vercel.app',
+            secure: true,
+            sameSite: "Lax",
+            path: "/"
+        });
         const data = {
             user: {
                 id: user._id,
@@ -61,7 +69,14 @@ const login = async (req, res) => {
         if (token) {
             console.log("Assign Token: ", token)
         }
-        res.cookie('accessToken', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+        res.cookie('accessToken', token, {
+            maxAge: 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            domain: '.vercel.app',
+            secure: true,
+            sameSite: "Lax",
+            path: "/"
+        });
 
         const userResponse = {
             id: user._id,
@@ -105,7 +120,7 @@ const getUser = async (req, res) => {
 
 const Logout = (req, res) => {
     const token = req.userId
-    if(!token) return responseUnauthorized(res)
+    if (!token) return responseUnauthorized(res)
     const remove = res.clearCookie('accessToken');
     if (remove) return responseSuccess(res)
     return responseInternalServerError(res)
