@@ -3,10 +3,6 @@ import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
 
 function authenticateToken(req, res, next) {
-    // const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-    // const token = cookies.accessToken;
-
-    // if (token.length === 0) return responseAPI(res, false, 401, "No token provided");
 
     let cookies = {};
     try {

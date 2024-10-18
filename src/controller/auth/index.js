@@ -32,7 +32,7 @@ const register = async (req, res) => {
             httpOnly: true,
             domain: '.vercel.app',
             secure: true,
-            sameSite: "Lax",
+            sameSite: "None",
             path: "/"
         });
         const data = {
@@ -74,7 +74,7 @@ const login = async (req, res) => {
             httpOnly: true,
             domain: '.vercel.app',
             secure: true,
-            sameSite: "Lax",
+            sameSite: "None",
             path: "/"
         });
 

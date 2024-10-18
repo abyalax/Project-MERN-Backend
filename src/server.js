@@ -21,7 +21,6 @@ var corsOption = {
     credentials: true,
     exposedHeaders: [
         'x-auth-token',
-        "Access-Control-Allow-Credentials",
     ],
 };
 app.use(cors(corsOption));
@@ -44,10 +43,7 @@ app.use('/api/products', ProductRoutes)
 app.use("/api/cloud", cldRoutes);
 
 //Server
-mongoose.connect(`${mongoURL}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(`${mongoURL}`)
     .then(() => console.log("Database is Connected Succesfully"))
     .catch((err) => console.log(err))
 
