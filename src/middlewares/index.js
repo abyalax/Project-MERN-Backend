@@ -1,17 +1,14 @@
 import { responseAPI } from "../utils/response.js";
-import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
 
 function authenticateToken(req, res, next) {
 
-    let cookies = {};
-    try {
-        cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-    } catch (err) {
-        return responseAPI(res, false, 400, "Error parsing cookies");
-    }
+    const info = req
+    console.log({info});
+    
+    const token = req.cookies.accessToken;
+    console.log({token});
 
-    const token = cookies.accessToken;
     if (!token) return responseAPI(res, false, 401, "No token provided");
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
