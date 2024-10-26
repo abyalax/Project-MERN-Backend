@@ -21,7 +21,8 @@ var corsOption = {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     exposedHeaders: [
-        'x-auth-token','Access-Control-Allow-Credentials',
+        'x-auth-token',
+        'Access-Control-Allow-Credentials',
         'Access-Control-Allow-Origin',
         'Access-Control-Allow-Methods',
         'Access-Control-Allow-Headers',
