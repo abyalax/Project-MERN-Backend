@@ -14,9 +14,10 @@ import ProductRoutes from "./routes/products/index.js";
 
 const app = express();
 const mongoURL = process.env.MONGO_URL_CLOUD;
+const origin  = process.env.ORIGIN_PRODUCTION
 
 var corsOption = {
-    origin: 'https://project-mern-frontend-phi.vercel.app',
+    origin,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     exposedHeaders: [
