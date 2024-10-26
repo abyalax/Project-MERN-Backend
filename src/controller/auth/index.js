@@ -26,7 +26,9 @@ const register = async (req, res) => {
         const user = await newUser.save();
         if (!user) return responseAPI(res, false, 400, "Failed to register user");
         const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
-
+        console.log("Assign Token: ", token);
+        res.setHeader('Access-Control-Allow-Origin', 'fake-tokopedia.vercel.app');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.cookie('accessToken', token, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
@@ -66,9 +68,9 @@ const login = async (req, res) => {
             role: user.role
         };
         const token = jwt.sign(tokenData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
-        if (token) {
-            console.log("Assign Token: ", token)
-        }
+        console.log("Assign Token: ", token)
+        res.setHeader('Access-Control-Allow-Origin', 'fake-tokopedia.vercel.app');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.cookie('accessToken', token, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
