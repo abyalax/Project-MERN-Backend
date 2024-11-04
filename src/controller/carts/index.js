@@ -9,7 +9,6 @@ export const addToCart = async (req, res) => {
         if (!user) return responseAPI(res, false, 404, "User not found");
         const { productId, quantity, price } = req.body;
         if (!productId || !quantity || !price) {
-            console.log(req.body);
             return responseAPI(res, false, 400, "Invalid data");
         }
         const check = user.carts.find((cart) => (
@@ -36,7 +35,6 @@ export const updateCart = async (req, res) => {
         const user = await User.findById(req.userId);
         if (!user) return responseAPI(res, false, 404, "User not found");
         const { productId, quantity, liked } = req.body.cart
-        console.log(req.body);
         if (!productId || quantity === undefined || quantity < 1) {
             return responseAPI(res, false, 400, "Invalid data: productId and quantity are required");
         }

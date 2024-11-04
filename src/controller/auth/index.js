@@ -26,17 +26,6 @@ const register = async (req, res) => {
         const user = await newUser.save();
         if (!user) return responseAPI(res, false, 400, "Failed to register user");
         const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
-        console.log("Assign Token: ", token);
-        res.setHeader('Access-Control-Allow-Origin', 'fake-tokopedia.vercel.app');
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
-        res.cookie('accessToken', token, {
-            maxAge: 24 * 60 * 60 * 1000,
-            httpOnly: true,
-            domain: '.vercel.app',
-            secure: true,
-            sameSite: "None",
-            path: "/"
-        });
         const data = {
             user: {
                 id: user._id,
@@ -68,18 +57,6 @@ const login = async (req, res) => {
             role: user.role
         };
         const token = jwt.sign(tokenData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
-        console.log("Assign Token: ", token)
-        res.setHeader('Access-Control-Allow-Origin', 'fake-tokopedia.vercel.app');
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
-        res.cookie('accessToken', token, {
-            maxAge: 24 * 60 * 60 * 1000,
-            httpOnly: true,
-            domain: '.vercel.app',
-            secure: true,
-            sameSite: "None",
-            path: "/"
-        });
-
         const userResponse = {
             id: user._id,
             name: user.name,
@@ -120,13 +97,4 @@ const getUser = async (req, res) => {
     }
 };
 
-const Logout = (req, res) => {
-    const token = req.userId
-    if (!token) return responseUnauthorized(res)
-    const remove = res.clearCookie('accessToken');
-    if (remove) return responseSuccess(res)
-    return responseInternalServerError(res)
-}
-
-
-export { register, login, getUser, Logout };
+export { register, login, getUser };

@@ -11,10 +11,9 @@ import userRoutes from "./routes/user/index.js";
 import { authenticateToken } from "./middlewares/index.js";
 import cldRoutes from "./routes/cloudinary/index.js";
 import ProductRoutes from "./routes/products/index.js";
+import { mongoURL, origin } from "./utils/constant.js";
 
 const app = express();
-const mongoURL = process.env.MONGO_URL_CLOUD;
-const origin  = process.env.ORIGIN_PRODUCTION
 
 var corsOption = {
     origin,
@@ -22,14 +21,10 @@ var corsOption = {
     credentials: true,
     exposedHeaders: [
         'x-auth-token',
-        'Access-Control-Allow-Credentials',
-        'Access-Control-Allow-Origin',
-        'Access-Control-Allow-Methods',
-        'Access-Control-Allow-Headers',
-        'Content-Type'
     ],
 };
 app.use(cors(corsOption));
+console.log({origin});
 
 app.get('/', (req, res) => {
     res.send("Hello API success runnning");
